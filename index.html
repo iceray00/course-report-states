@@ -727,7 +727,7 @@ body,.stage{background:#eef4fb}
 </style>
 <meta name="robots" content="noindex">
 <style>
-/* 课程报告 · 过渡与异常状态（D1 D2 E1 E2 F7 F8）
+/* 课程报告 · 过渡与异常状态（D1 D2 E1 E2 E3 E4 E9 F7 F8）
    叠加在 report-prototype.html 原样式之上：原型的卡片、头像、标题、间距都不动，
    这里只定义三个模块里新增的状态内容。颜色取自原型：
    暖白卡片 / 暖棕辅助色（翻页按钮、下载打印）/ 灰蓝辅助文字 / 浅蓝虚线空状态。 */
@@ -759,6 +759,25 @@ body,.stage{background:#eef4fb}
 .practice-card--state .practice-empty{margin-top:0;padding:22px 14px}
 .practice-card--state .practice-empty .state-copy{color:#6b7890}
 
+/* ---------- E3 / E4：错题回顾结果态（全部订正 / 没有错题） ---------- */
+.practice-result{display:flex;align-items:center;gap:14px;padding:4px 3px}
+.practice-result-mark{flex:0 0 auto;width:36px;height:36px;fill:none;stroke:#d76f56;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.practice-result strong{display:block;color:#17243f;font-size:16px;font-weight:750;line-height:1.4}
+.practice-result p{margin:4px 0 0;color:#6f7e94;font-size:13px;line-height:1.5}
+.practice-result em{padding-bottom:3px;font-style:normal;background:linear-gradient(90deg,rgba(215,111,86,0),rgba(215,111,86,.5) 22%,rgba(215,111,86,.5) 78%,rgba(215,111,86,0)) 0 100%/100% 2px no-repeat}
+/* E3 带底部操作：卡片不再垂直居中，上下留白交给内容 */
+.practice-card--footer{justify-content:flex-start;min-height:0;padding:18px 15px 8px}
+.practice-card--footer .practice-result-footer{margin-top:16px}
+.practice-card--footer .practice-scroll{margin-top:12px}
+
+/* ---------- E9：App 外进入重练的底部弹窗 ---------- */
+.retry-scrim{position:fixed;z-index:50;top:0;bottom:0;left:0;width:100%;background:rgba(23,36,63,.42)}
+.retry-sheet{position:fixed;z-index:55;bottom:0;left:0;width:100%;display:grid;gap:12px;padding:26px 20px 30px;border-radius:20px 20px 0 0;background:#fff;box-shadow:0 -10px 30px rgba(23,36,63,.16);text-align:center}
+.retry-sheet h3{margin:0 0 8px;color:#17243f;font-size:17px;font-weight:750;line-height:1.45}
+.retry-sheet button{display:block;width:100%;min-height:48px;border:0;border-radius:14px;font:inherit;font-size:15px;font-weight:750;cursor:pointer}
+.retry-sheet-primary{color:#fff;background:linear-gradient(180deg,#5c7cf2,#3d62e8);box-shadow:0 3px 0 #2f4fc6,0 10px 18px rgba(61,98,232,.2)}
+.retry-sheet-secondary{color:#3d62e8;background:#edf2fe;box-shadow:0 3px 0 #d6e0fa}
+
 /* ---------- F7 / F8：课堂要点图片失败占位 ---------- */
 .photo-card.is-failed{cursor:default}
 .photo-card.is-failed img{visibility:hidden}
@@ -787,7 +806,7 @@ body,.stage{background:#eef4fb}
 @media(max-width:940px){
   .st-switcher{top:auto;right:0;bottom:0;left:0;width:auto;padding:8px 10px;border-radius:14px 14px 0 0}
   .st-switcher strong,.st-switcher small,.st-switcher button span{display:none}
-  .st-switcher-list{grid-template-columns:repeat(6,minmax(0,1fr));margin-top:0}
+  .st-switcher-list{grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;margin-top:0}
   .st-switcher button{justify-content:center;padding:0}
 }
 @media print{.st-switcher{display:none}}
@@ -798,6 +817,9 @@ html.artboard .stage,html.block .stage{padding:0}
 html.artboard .device,html.block .device{width:390px;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
 html.artboard .screen,html.block .screen{border:0;border-radius:0;box-shadow:none}
 html.artboard .toast,html.block .toast{display:none}
+html.block .retry-scrim,html.block .retry-sheet{position:static;width:auto!important}
+html.block .retry-scrim{display:none}
+html.block .retry-sheet{margin:16px 12px;border-radius:20px}
 .ab-status{position:fixed;z-index:60;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;background:rgba(216,233,252,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:rgba(25,42,68,.9);font-family:"Avenir Next",Avenir,"SF Pro Display",sans-serif;font-size:12px;font-weight:650}
 .ab-status .device-battery{width:20px;height:10px}
 .ab-status-signal{display:inline-flex;align-items:center;gap:6px}
@@ -1983,7 +2005,7 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 </script>
 <script>
 // 课程报告 · 过渡与异常状态
-// 直接打开：页面旁边有切换面板，点 D1 D2 E1 E2 F7 F8 切换状态
+// 直接打开：页面旁边有切换面板，点编号切换状态（D1 D2 E1 E2 E3 E4 E9 F7 F8）
 // 出图用：report-states.html?artboard#D1  390×844 画板（固定状态栏 + 编号，自动滚到对应模块）
 //         report-states.html?block#D1     只显示这一个模块
 (() => {
@@ -1992,6 +2014,9 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     D2: '老师点评 · 暂未生成',
     E1: '错题回顾 · 生成中',
     E2: '错题回顾 · 暂未生成',
+    E3: '错题回顾 · 全部订正',
+    E4: '错题回顾 · 没有错题',
+    E9: '错题回顾 · App 外进入重练',
     F7: '课堂要点 · 部分图片加载失败',
     F8: '课堂要点 · 全部图片加载失败',
   };
@@ -2020,9 +2045,9 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
   // 状态内容都是「加上去」的：原有节点只隐藏不删除，切换状态时可以完整还原
   const added = (node) => { node.dataset.stateNode = ''; return node; };
   const reset = () => {
-    panel.querySelectorAll('[data-state-node]').forEach((node) => node.remove());
+    document.querySelectorAll('[data-state-node]').forEach((node) => node.remove());
     panel.querySelectorAll('.st-off').forEach((node) => node.classList.remove('st-off'));
-    practiceCard.classList.remove('practice-card--state');
+    practiceCard.classList.remove('practice-card--state', 'practice-card--footer');
     cards.forEach((card) => card.classList.remove('is-failed'));
     carousel.classList.remove('is-all-failed');
   };
@@ -2042,6 +2067,44 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
       ? `<div role="status"><p class="state-copy state-copy--cool state-copy--loading">${copy}</p>${bars(true)}</div>`
       : `<div class="practice-empty" role="status"><p class="state-copy">${copy}</p></div>`)));
     practiceCard.classList.add('practice-card--state');
+  };
+
+  // 错题回顾的结果态（全部订正 / 没有错题）：对勾 + 标题 + 一行说明；withFooter 时保留底部两个操作
+  const CHECK = '<svg class="practice-result-mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 21.5c3.4 1.6 6.2 4.4 8.6 8.6C19.4 20.2 25.8 13 34 8"/></svg>';
+  const setPracticeResult = (title, copy, withFooter) => {
+    [...practiceCard.children].forEach((child) => child.classList.add('st-off'));
+    practiceCard.append(added(el(`<div class="practice-result" role="status">${CHECK}<div><strong>${title}</strong><p>${copy}</p></div></div>`)));
+    practiceCard.classList.add('practice-card--state');
+    if (!withFooter) return;
+    // 底部操作沿用原型的 .practice-footer-actions 样式，只把左侧文案换成「查看已订正错题」
+    const footer = added(el(`<div class="practice-footer-actions practice-result-footer">
+      <button class="practice-expand" type="button" aria-expanded="false"><span>查看已订正错题</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <button class="wrong-export" type="button">导出错题<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M5 18v2h14v-2"/></svg></button></div>`));
+    const list = practiceCard.querySelector('[data-practice-scroll]');
+    const toggle = footer.querySelector('.practice-expand');
+    toggle.addEventListener('click', () => {
+      // 原型里用原有的题目列表模拟「展开已订正错题」
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.querySelector('span').textContent = open ? '收起已订正错题' : '查看已订正错题';
+      list.classList.toggle('st-off', !open);
+    });
+    practiceCard.append(footer);
+    practiceCard.classList.add('practice-card--footer');
+  };
+
+  // App 外进入重练：底部弹窗，盖在报告上；位置和宽度跟随手机屏幕
+  const placeSheet = () => {
+    const { left, width } = document.querySelector('.screen').getBoundingClientRect();
+    document.querySelectorAll('.retry-scrim,.retry-sheet').forEach((node) => { node.style.left = `${left}px`; node.style.width = `${width}px`; });
+  };
+  window.addEventListener('resize', placeSheet);
+  const showRetrySheet = () => {
+    document.body.append(
+      added(el('<div class="retry-scrim"></div>')),
+      added(el('<div class="retry-sheet" role="dialog" aria-modal="true" aria-labelledby="retrySheetTitle"><h3 id="retrySheetTitle">请在 App 内进入重练</h3><button class="retry-sheet-primary" type="button">打开 App</button><button class="retry-sheet-secondary" type="button">下载 App</button></div>')),
+    );
+    placeSheet();
   };
 
   // 课堂要点：失败的图片换成占位；all 为 true 时带「图片加载失败，请重试」
@@ -2071,6 +2134,9 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
       case 'D2': setCommentState('老师点评暂未生成，可先查看其他内容', false); focus = comment; offset = 250; break;
       case 'E1': setPracticeState('正在整理本课错题...', true); focus = practice; offset = 330; break;
       case 'E2': setPracticeState('错题回顾暂未生成，可先查看其他内容', false); focus = practice; offset = 330; break;
+      case 'E3': setPracticeResult('今天的错题已全部订正', '4 道错题都完成了订正，继续保持！', true); focus = practice; offset = 330; break;
+      case 'E4': setPracticeResult('今天没有待订正错题', '今天的课堂练习<em>都做对啦</em>，继续保持', false); focus = practice; offset = 330; break;
+      case 'E9': showRetrySheet(); focus = practice; offset = 56; break;
       case 'F7':
         focus = recap; offset = 380;
         // 9 张里第 3 张失败，其余正常；轮播停在第 3 张
@@ -2099,7 +2165,7 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     });
     document.body.append(switcher);
     choose(STATES[hash] ? hash : 'D1', false);
-    window.addEventListener('load', () => focus.scrollIntoView({ block: 'center' }));
+    window.addEventListener('load', () => { focus.scrollIntoView({ block: 'center' }); placeSheet(); });
     return;
   }
 
@@ -2107,6 +2173,7 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 
   if (block) {
     document.documentElement.classList.add('block');
+    if (hash === 'E9') focus = document.querySelector('.retry-sheet');
     for (let node = focus; node && node !== document.body; node = node.parentElement) {
       [...node.parentElement.children].forEach((sibling) => {
         if (sibling !== node && !/^(SCRIPT|STYLE|LINK)$/.test(sibling.tagName)) sibling.classList.add('st-hide');
