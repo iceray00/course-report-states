@@ -727,33 +727,39 @@ body,.stage{background:#eef4fb}
 </style>
 <meta name="robots" content="noindex">
 <style>
-/* 课程报告 · 过渡与异常状态（D1 D2 E1 E2 E3 E4 E9 F7 F8）
+/* 课程报告 · 过渡与异常状态（B1 W1 C1 D1 D2 E2 E3 E4 E9 F7 F8）
    叠加在 report-prototype.html 原样式之上：原型的卡片、头像、标题、间距都不动，
-   这里只定义三个模块里新增的状态内容。颜色取自原型：
+   这里只定义各模块里新增的状态内容。颜色取自原型：
    暖白卡片 / 暖棕辅助色（翻页按钮、下载打印）/ 灰蓝辅助文字 / 浅蓝虚线空状态。 */
 
 /* ---------- 共用：状态文案 ---------- */
 .state-copy{margin:0;color:#6f7e94;font-size:13px;font-weight:600;line-height:20px}
 .state-copy--loading{display:flex;align-items:center;gap:8px}
 .state-copy--loading:before{flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:#d9a441;box-shadow:0 0 0 3px rgba(217,164,65,.16);content:"";animation:state-pulse 1.4s ease-in-out infinite}
-.state-copy--cool.state-copy--loading:before{background:#6f8fe0;box-shadow:0 0 0 3px rgba(111,143,224,.16)}
 
 /* ---------- 共用：生成中的占位条 ---------- */
 .state-bars{display:grid;gap:5px;margin-top:7px}
 .state-bars i{display:block;height:6px;border-radius:999px;background:linear-gradient(90deg,rgba(238,228,210,.62) 25%,rgba(250,244,233,.98) 50%,rgba(238,228,210,.62) 75%);background-size:200% 100%;animation:state-shimmer 1.6s linear infinite}
 .state-bars i:nth-child(1){width:100%}
 .state-bars i:nth-child(2){width:62%}
-.state-bars--cool i{background-image:linear-gradient(90deg,rgba(222,231,244,.72) 25%,rgba(241,245,251,.98) 50%,rgba(222,231,244,.72) 75%)}
 @keyframes state-shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
 @keyframes state-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
 @media (prefers-reduced-motion:reduce){.state-bars i,.state-copy--loading:before{animation:none}}
+
+/* ---------- B1：学习数据、课堂指标没有正常返回时显示「--」 ----------
+   位置、字号、行高都和有数据时一样，只把颜色放浅、去掉单位；圆环只剩底环 */
+.study-stat.is-empty .study-stat-value strong,
+.metric.is-empty .ring-core strong{color:#a3aebf;letter-spacing:.06em}
+
+/* ---------- W1：长文案分行展示（报告标题、课时名称、知识点名称） ---------- */
+.is-wrap-demo .report-cover h1{overflow-wrap:anywhere;text-wrap:balance}
 
 /* ---------- D1 / D2：老师点评（头像 + 标题沿用原型，只换下方内容） ---------- */
 .comment-state{margin-top:0}
 .comment-state .state-copy{color:#8a7b66}
 .comment-state--pending{margin-top:3px;padding:9px 12px;border-radius:10px;background:rgba(244,236,221,.58)}
 
-/* ---------- E1 / E2：错题回顾（模块标题 + 卡片沿用原型，卡片内只放状态） ---------- */
+/* ---------- E2：错题回顾（模块标题 + 卡片沿用原型，卡片内只放状态） ---------- */
 .practice-card--state{display:flex;flex-direction:column;justify-content:center;min-height:100px;padding:16px 15px}
 /* E2 沿用原型已有的 .practice-empty 虚线空状态样式 */
 .practice-card--state .practice-empty{margin-top:0;padding:22px 14px}
@@ -807,7 +813,7 @@ body,.stage{background:#eef4fb}
 @media(max-width:940px){
   .st-switcher{top:auto;right:0;bottom:0;left:0;width:auto;padding:8px 10px;border-radius:14px 14px 0 0}
   .st-switcher strong,.st-switcher small,.st-switcher button span{display:none}
-  .st-switcher-list{grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;margin-top:0}
+  .st-switcher-list{grid-template-columns:repeat(11,minmax(0,1fr));gap:3px;margin-top:0}
   .st-switcher button{justify-content:center;padding:0}
 }
 @media print{.st-switcher{display:none}}
@@ -831,6 +837,7 @@ html.block .retry-sheet{margin:16px 12px;border-radius:20px}
 html.block,html.block body{width:390px;min-height:0;background:#d8e9fc}
 html.block .st-hide{display:none!important}
 html.block .section{border-top:0}
+html.block .subject-overview-card{margin-top:14px}
 html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0}
 </style>
 </head>
@@ -2006,14 +2013,16 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 </script>
 <script>
 // 课程报告 · 过渡与异常状态
-// 直接打开：页面旁边有切换面板，点编号切换状态（D1 D2 E1 E2 E3 E4 E9 F7 F8）
+// 直接打开：页面旁边有切换面板，点编号切换状态（B1 W1 C1 D1 D2 E2 E3 E4 E9 F7 F8）
 // 出图用：report-states.html?artboard#D1  390×844 画板（固定状态栏 + 编号，自动滚到对应模块）
 //         report-states.html?block#D1     只显示这一个模块
 (() => {
   const STATES = {
+    B1: '学习表现 · 数据未返回显示 --',
+    W1: '长文案 · 分行展示',
+    C1: '知识掌握 · 联排课隐藏标题',
     D1: '老师点评 · 生成中',
     D2: '老师点评 · 暂未生成',
-    E1: '错题回顾 · 生成中',
     E2: '错题回顾 · 暂未生成',
     E3: '错题回顾 · 全部订正',
     E4: '错题回顾 · 没有错题',
@@ -2027,6 +2036,9 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
   const block = params.has('block') && !!STATES[hash];
 
   const panel = document.querySelector('#subject-math');
+  const hero = document.querySelector('.report-hero');
+  const overview = panel.querySelector('.subject-overview-card');
+  const knowledge = panel.querySelector('#math-knowledge');
   const comment = panel.querySelector('[data-comment]');
   const practice = panel.querySelector('[data-practice]');
   const practiceCard = practice.querySelector('.practice-card');
@@ -2039,19 +2051,41 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     t.innerHTML = html.trim();
     return t.content.firstElementChild;
   };
-  const bars = (cool) => `<div class="state-bars${cool ? ' state-bars--cool' : ''}" aria-hidden="true"><i></i><i></i></div>`;
+  const bars = () => '<div class="state-bars" aria-hidden="true"><i></i><i></i></div>';
   const GLYPH = '<svg class="photo-fallback-glyph" viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="8" width="30" height="24" rx="4"/><circle cx="14" cy="16.5" r="2.6"/><path d="m6 28 8.5-8 6 5.5 4.5-4 9 8"/></svg>';
   const RELOAD = '<button class="photo-reload" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg>重新加载</button>';
 
   // 状态内容都是「加上去」的：原有节点只隐藏不删除，切换状态时可以完整还原
   const added = (node) => { node.dataset.stateNode = ''; return node; };
+  // 改过文字或属性的原有节点记在这里，切换状态时逐个还原
+  let undo = [];
+  const setText = (node, text) => { const old = node.textContent; undo.push(() => { node.textContent = old; }); node.textContent = text; };
+  const setAttr = (node, name, value) => { const old = node.getAttribute(name); undo.push(() => node.setAttribute(name, old)); node.setAttribute(name, value); };
+  const mark = (node, name) => { node.classList.add(name); undo.push(() => node.classList.remove(name)); };
   const reset = () => {
+    undo.reverse().forEach((fn) => fn());
+    undo = [];
     document.querySelectorAll('[data-state-node]').forEach((node) => node.remove());
     panel.querySelectorAll('.st-off').forEach((node) => node.classList.remove('st-off'));
     practiceCard.classList.remove('practice-card--state', 'practice-card--footer');
     cards.forEach((card) => card.classList.remove('is-failed'));
     carousel.classList.remove('is-all-failed');
     screen.classList.remove('has-retry-sheet');
+  };
+
+  // 学习数据、课堂指标：没有正常返回的那一项显示「--」，不带单位；圆环只留底环
+  const emptyStat = (stat) => {
+    mark(stat, 'is-empty');
+    setText(stat.querySelector('strong'), '--');
+    mark(stat.querySelector('small'), 'st-off');
+  };
+  const emptyMetric = (metric) => {
+    const ring = metric.querySelector('.ring');
+    mark(metric, 'is-empty');
+    setAttr(ring, 'aria-label', ring.getAttribute('aria-label').replace(/\s.*$/, ' 暂无数据'));
+    setAttr(ring, 'style', ring.getAttribute('style').replace(/--progress:\d+/, '--progress:0'));
+    setText(ring.querySelector('strong'), '--');
+    mark(ring.querySelector('small'), 'st-off');
   };
 
   // 老师点评：保留 .comment-top（头像 + 标题），只替换下方内容
@@ -2063,11 +2097,9 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
   };
 
   // 错题回顾：保留模块标题与卡片，卡片内只放状态
-  const setPracticeState = (copy, loading) => {
+  const setPracticeState = (copy) => {
     [...practiceCard.children].forEach((child) => child.classList.add('st-off'));
-    practiceCard.append(added(el(loading
-      ? `<div role="status"><p class="state-copy state-copy--cool state-copy--loading">${copy}</p>${bars(true)}</div>`
-      : `<div class="practice-empty" role="status"><p class="state-copy">${copy}</p></div>`)));
+    practiceCard.append(added(el(`<div class="practice-empty" role="status"><p class="state-copy">${copy}</p></div>`)));
     practiceCard.classList.add('practice-card--state');
   };
 
@@ -2133,14 +2165,36 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 
   let focus = comment;
   let offset = 250;
+  let align = 'center';
 
   const apply = (code) => {
     reset();
+    align = 'center';
     switch (code) {
+      case 'B1':
+        // 上面一行第 2 个（知识点数）、下面一行第 1 个（准时率）没有正常返回
+        emptyStat(overview.querySelector('.study-stat.points'));
+        emptyMetric(overview.querySelector('.metric'));
+        focus = overview; offset = 400;
+        break;
+      case 'W1': {
+        // 三处长文案：报告标题、课时名称、知识点名称，放不下时分行，不截断
+        const lesson = knowledge.querySelector('.lesson-node');
+        setText(hero.querySelector('h1'), '爱学习的小太阳萱萱的学习报告');
+        setText(lesson.querySelector('.lesson-name strong'), '函数单调性的定义、图像特征与常见函数单调区间的判断方法综合梳理');
+        setText(lesson.querySelector('.slice-name'), '函数单调性的概念、增减函数的图像特征与定义域的关系');
+        mark(screen, 'is-wrap-demo');
+        focus = hero; offset = 0; align = 'start';
+        break;
+      }
+      case 'C1':
+        // 联排课：课程大纲标题隐藏，不占位，卡片直接从课时 1 开始
+        mark(knowledge.querySelector('.outline-chapter'), 'st-off');
+        focus = knowledge; offset = 120; align = 'start';
+        break;
       case 'D1': setCommentState('正在整理本课点评...', true); focus = comment; offset = 250; break;
       case 'D2': setCommentState('老师点评暂未生成，可先查看其他内容', false); focus = comment; offset = 250; break;
-      case 'E1': setPracticeState('正在整理本课错题...', true); focus = practice; offset = 330; break;
-      case 'E2': setPracticeState('错题回顾暂未生成，可先查看其他内容', false); focus = practice; offset = 330; break;
+      case 'E2': setPracticeState('错题回顾暂未生成，可先查看其他内容'); focus = practice; offset = 330; break;
       case 'E3': setPracticeResult('今天的错题已全部订正', '4 道错题都完成了订正，继续保持！', true); focus = practice; offset = 330; break;
       case 'E4': setPracticeResult('今天没有待订正错题', '今天的课堂练习<em>都做对啦</em>，继续保持', false); focus = practice; offset = 330; break;
       case 'E9': showRetrySheet(); focus = practice; offset = 56; break;
@@ -2164,15 +2218,15 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     const choose = (key, jump) => {
       apply(key);
       switcher.querySelectorAll('button').forEach((button) => button.classList.toggle('active', button.dataset.state === key));
-      if (jump) focus.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      if (jump) focus.scrollIntoView({ block: align, behavior: 'smooth' });
     };
     switcher.addEventListener('click', (event) => {
       const button = event.target.closest('button[data-state]');
       if (button) choose(button.dataset.state, true);
     });
     document.body.append(switcher);
-    choose(STATES[hash] ? hash : 'D1', false);
-    window.addEventListener('load', () => { focus.scrollIntoView({ block: 'center' }); });
+    choose(STATES[hash] ? hash : 'B1', false);
+    window.addEventListener('load', () => { focus.scrollIntoView({ block: align }); });
     return;
   }
 
@@ -2181,11 +2235,15 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
   if (block) {
     document.documentElement.classList.add('block');
     if (hash === 'E9') focus = document.querySelector('.retry-sheet');
+    // 知识掌握这个 section 里还包着老师点评卡片，单独出图时不带它
+    if (focus === knowledge || hash === 'W1') { focus = knowledge; comment.classList.add('st-hide'); }
     for (let node = focus; node && node !== document.body; node = node.parentElement) {
       [...node.parentElement.children].forEach((sibling) => {
         if (sibling !== node && !/^(SCRIPT|STYLE|LINK)$/.test(sibling.tagName)) sibling.classList.add('st-hide');
       });
     }
+    // 分行展示还要带上报告头
+    if (hash === 'W1') hero.classList.remove('st-hide');
     const report = () => parent.postMessage({ stateBlock: hash, height: Math.ceil(document.documentElement.getBoundingClientRect().height) }, '*');
     window.addEventListener('load', report);
     new ResizeObserver(report).observe(document.documentElement);
