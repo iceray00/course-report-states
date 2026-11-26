@@ -752,7 +752,9 @@ body,.stage{background:#eef4fb}
 .metric.is-empty .ring-core strong{color:#a3aebf;letter-spacing:.06em}
 
 /* ---------- W1：长文案分行展示（报告标题、课时名称、知识点名称） ---------- */
-.is-wrap-demo .report-cover h1{overflow-wrap:anywhere;text-wrap:balance}
+.is-wrap-demo .report-cover h1{overflow-wrap:anywhere}
+/* 课时名称同样先占满一行再折行（原型里是各行均分） */
+.is-wrap-demo #subject-math #math-knowledge .lesson-name strong{text-wrap:wrap}
 
 /* ---------- D1 / D2：老师点评（头像 + 标题沿用原型，只换下方内容） ---------- */
 .comment-state{margin-top:0}
@@ -2178,7 +2180,7 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
         focus = overview; offset = 400;
         break;
       case 'W1': {
-        // 三处长文案：报告标题、课时名称、知识点名称，放不下时分行，不截断
+        // 三处长文案：报告标题、课时名称、知识点名称，放不下时分行，不截断；报告标题先占满一行再折行
         const lesson = knowledge.querySelector('.lesson-node');
         setText(hero.querySelector('h1'), '爱学习的小太阳萱萱的学习报告');
         setText(lesson.querySelector('.lesson-name strong'), '函数单调性的定义、图像特征与常见函数单调区间的判断方法综合梳理');
