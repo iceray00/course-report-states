@@ -727,7 +727,7 @@ body,.stage{background:#eef4fb}
 </style>
 <meta name="robots" content="noindex">
 <style>
-/* 课程报告 · 过渡与异常状态（B1 W1 C1 D1 D2 E2 E3 E4 E9 F7 F8）
+/* 课程报告 · 过渡与异常状态（B1 W1 C1 D1 D2 E2 E3 E4 F7 F8）
    叠加在 report-prototype.html 原样式之上：原型的卡片、头像、标题、间距都不动，
    这里只定义各模块里新增的状态内容。颜色取自原型：
    暖白卡片 / 暖棕辅助色（翻页按钮、下载打印）/ 灰蓝辅助文字 / 浅蓝虚线空状态。 */
@@ -778,15 +778,6 @@ body,.stage{background:#eef4fb}
 .practice-card--footer .practice-result-footer{margin-top:16px}
 .practice-card--footer .practice-scroll{margin-top:12px}
 
-/* ---------- E9：App 外进入重练的底部弹窗 ---------- */
-.screen.has-retry-sheet{position:relative}
-.retry-scrim{position:absolute;z-index:50;inset:0;background:rgba(23,36,63,.42)}
-.retry-sheet{position:absolute;right:0;bottom:0;left:0;display:grid;gap:12px;padding:26px 20px 30px;border-radius:20px 20px 0 0;background:#fff;box-shadow:0 -10px 30px rgba(23,36,63,.16);text-align:center}
-.retry-sheet h3{margin:0 0 8px;color:#17243f;font-size:17px;font-weight:750;line-height:1.45}
-.retry-sheet button{display:block;width:100%;min-height:48px;border:0;border-radius:14px;font:inherit;font-size:15px;font-weight:750;cursor:pointer}
-.retry-sheet-primary{color:#fff;background:linear-gradient(180deg,#5c7cf2,#3d62e8);box-shadow:0 3px 0 #2f4fc6,0 10px 18px rgba(61,98,232,.2)}
-.retry-sheet-secondary{color:#3d62e8;background:#edf2fe;box-shadow:0 3px 0 #d6e0fa}
-
 /* ---------- F7 / F8：课堂要点图片失败占位 ---------- */
 .photo-card.is-failed{cursor:default}
 .photo-card.is-failed img{visibility:hidden}
@@ -800,12 +791,17 @@ body,.stage{background:#eef4fb}
 .recap-carousel.is-all-failed .recap-controls{display:none}
 
 /* ---------- Q1 / Q2：错题题干含图 ----------
-   Q1 只露出图片顶部一段（下沿渐隐，提示还有内容），整块可点，右下角「查看大图」 */
-.stem-figure{position:relative;display:block;width:100%;height:104px;margin:9px 0 0;padding:0;overflow:hidden;border:0;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(80,106,150,.14);cursor:zoom-in}
+   Q1 默认只露出图片顶部一段（下沿渐隐，提示还有内容）；右下角「展开」在原地放出整张图；点图片看大图 */
+.stem-figure{position:relative;height:104px;margin:9px 0 0;overflow:hidden;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px rgba(80,106,150,.14)}
+.stem-figure-image{display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}
 .stem-figure img{display:block;width:230px;max-width:86%;margin:8px auto 0}
-.stem-figure:after{position:absolute;right:1px;bottom:1px;left:1px;height:46px;border-radius:0 0 9px 9px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.96));content:""}
-.stem-figure-more{position:absolute;z-index:1;right:8px;bottom:8px;display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 10px 0 8px;border-radius:999px;color:#536886;background:#eef3fb;font-size:12px;font-weight:650;line-height:1}
+.stem-figure:after{position:absolute;right:1px;bottom:1px;left:1px;height:46px;border-radius:0 0 9px 9px;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.96));pointer-events:none;content:""}
+.stem-figure.is-open{height:auto;padding-bottom:40px}
+.stem-figure.is-open:after{display:none}
+.stem-figure-more{position:absolute;z-index:1;right:8px;bottom:8px;display:inline-flex;align-items:center;gap:3px;height:26px;padding:0 8px 0 11px;border:0;border-radius:999px;color:#536886;background:#eef3fb;font:inherit;font-size:12px;font-weight:650;line-height:1;cursor:pointer}
 .stem-figure-more svg,.stem-toggle svg{display:block;flex:0 0 auto;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.stem-figure-more svg{transition:transform .18s ease}
+.stem-figure-more[aria-expanded="true"] svg{transform:rotate(180deg)}
 /* 大图：沿用原型 .lightbox，题目配图是线稿，垫白底 */
 .stem-viewer .lightbox-stage img{padding:14px;background:#fff;cursor:default}
 /* Q2 只有这张图失败：小占位一行，不带大段文案 */
@@ -858,9 +854,6 @@ html.artboard .stage,html.block .stage{padding:0}
 html.artboard .device,html.block .device{width:390px;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
 html.artboard .screen,html.block .screen{border:0;border-radius:0;box-shadow:none}
 html.artboard .toast,html.block .toast{display:none}
-html.block .retry-scrim{position:static;display:block;background:none}
-html.block .retry-sheet{position:static}
-html.block .retry-sheet{margin:16px 12px;border-radius:20px}
 .ab-status{position:fixed;z-index:60;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;background:rgba(216,233,252,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:rgba(25,42,68,.9);font-family:"Avenir Next",Avenir,"SF Pro Display",sans-serif;font-size:12px;font-weight:650}
 .ab-status .device-battery{width:20px;height:10px}
 .ab-status-signal{display:inline-flex;align-items:center;gap:6px}
@@ -2048,7 +2041,7 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 <script>
 // 课程报告 · 过渡与异常状态 + 错题题干展示
 // 直接打开：页面旁边有切换面板，上面两个页签，点编号切换
-//   过渡与异常状态：B1 W1 C1 D1 D2 E2 E3 E4 E9 F7 F8
+//   过渡与异常状态：B1 W1 C1 D1 D2 E2 E3 E4 F7 F8
 //   错题题干展示：Q1 Q2 Q3
 // 出图用：report-states.html?artboard#D1  390×844 画板（固定状态栏 + 编号，自动滚到对应模块）
 //         report-states.html?block#D1     只显示这一个模块
@@ -2063,12 +2056,11 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     E2: '错题回顾 · 暂未生成',
     E3: '错题回顾 · 全部订正',
     E4: '错题回顾 · 没有错题',
-    E9: '错题回顾 · App 外进入重练',
     F7: '课堂要点 · 部分图片加载失败',
     F8: '课堂要点 · 全部图片加载失败',
     } },
     { name: '错题题干展示', states: {
-    Q1: '题干含图 · 露出顶部，查看大图',
+    Q1: '题干含图 · 露出顶部，可展开',
     Q2: '题干含图 · 图片加载失败',
     Q3: '长题干 · 默认 4 行，展开全文',
     } },
@@ -2115,7 +2107,6 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     practiceCard.classList.remove('practice-card--state', 'practice-card--footer');
     cards.forEach((card) => card.classList.remove('is-failed'));
     carousel.classList.remove('is-all-failed');
-    screen.classList.remove('has-retry-sheet');
   };
 
   // 学习数据、课堂指标：没有正常返回的那一项显示「--」，不带单位；圆环只留底环
@@ -2172,24 +2163,7 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     practiceCard.classList.add('practice-card--footer');
   };
 
-  // App 外进入重练：底部弹窗。遮罩和弹窗都放进手机屏幕（.screen）里面，
-  // 被屏幕的圆角裁切；弹窗贴着可视区域底部，滚到页面最底时停在屏幕底边
   const screen = document.querySelector('.screen');
-  const placeSheet = () => {
-    const sheet = screen.querySelector('.retry-sheet');
-    if (!sheet || block) return;
-    // 窄屏时切换面板在底部，弹窗让出它的高度
-    const bar = document.querySelector('.st-switcher');
-    const floor = bar && bar.getBoundingClientRect().left <= 0 ? bar.getBoundingClientRect().top : window.innerHeight;
-    sheet.style.bottom = `${Math.max(0, screen.getBoundingClientRect().bottom - floor)}px`;
-  };
-  window.addEventListener('scroll', placeSheet, { passive: true });
-  window.addEventListener('resize', placeSheet);
-  const showRetrySheet = () => {
-    screen.classList.add('has-retry-sheet');
-    screen.append(added(el('<div class="retry-scrim"><div class="retry-sheet" role="dialog" aria-modal="true" aria-labelledby="retrySheetTitle"><h3 id="retrySheetTitle">请在 App 内进入重练</h3><button class="retry-sheet-primary" type="button">打开 App</button><button class="retry-sheet-secondary" type="button">下载 App</button></div></div>')));
-    placeSheet();
-  };
 
   // 课堂要点：失败的图片换成占位；all 为 true 时带「图片加载失败，请重试」
   const failCard = (card, all) => {
@@ -2236,7 +2210,6 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 （3）文章结尾段画线句有什么作用？请结合全文，具体分析。`,
     hint: '结尾段的作用可以从内容、结构、主旨三方面想：父亲这句“呓语”里第一次出现了谁？它和第⑫段“我”的疑问是什么关系？',
   };
-  const ZOOM = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5M11 8.5v5M8.5 11h5"/></svg>';
   const CHEVRON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
   // 换题：列表里的题干、点拨，以及「导出错题」用的完整题干（导出始终是全文，和列表里是否展开无关）
@@ -2247,10 +2220,18 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
     setHTML(question.querySelector('.question-export-data'), `<div data-export-stem>${pars.map((par) => `<p>${par}</p>`).join('')}${withImage ? `<p><img src="${STEM_IMAGE}" alt="题目配图" style="display:block;width:62mm;margin-top:3mm"></p>` : ''}</div>`);
   };
 
-  // 题干配图：只露出图片顶部一段，整块可点，点开看大图
+  // 题干配图：默认只露出图片顶部一段，右下角「展开」把整张图在原地放出来（再点收起）；
+  // 点图片本身（展开前后都一样）是看大图
   const stemFigure = () => {
-    const figure = added(el(`<button class="stem-figure" type="button" aria-label="题目配图，点击查看大图"><img src="${STEM_IMAGE}" alt="" draggable="false"><span class="stem-figure-more">${ZOOM}查看大图</span></button>`));
-    figure.addEventListener('click', () => {
+    const figure = added(el(`<div class="stem-figure"><button class="stem-figure-image" type="button" aria-label="题目配图，点击查看大图"><img src="${STEM_IMAGE}" alt="" draggable="false"></button><button class="stem-figure-more" type="button" aria-expanded="false"><span>展开</span>${CHEVRON}</button></div>`));
+    const toggle = figure.querySelector('.stem-figure-more');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.querySelector('span').textContent = open ? '收起' : '展开';
+      figure.classList.toggle('is-open', open);
+    });
+    figure.querySelector('.stem-figure-image').addEventListener('click', () => {
       // 大图沿用原型课堂要点的大图预览样式，单张图不带翻页
       const viewer = added(el(`<div class="lightbox open stem-viewer" role="dialog" aria-modal="true" aria-label="大图预览"><div class="lightbox-top"><span></span><button class="lightbox-close" type="button" aria-label="关闭大图">×</button></div><div class="lightbox-stage"><img src="${STEM_IMAGE}" alt="题目配图" draggable="false"></div><div></div></div>`));
       viewer.addEventListener('click', (event) => { if (event.target.tagName !== 'IMG') viewer.remove(); });
@@ -2327,7 +2308,6 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
       case 'E2': setPracticeState('错题回顾暂未生成，可先查看其他内容'); focus = practice; offset = 330; break;
       case 'E3': setPracticeResult('今天的错题已全部订正', '4 道错题都完成了订正，继续保持！', true); focus = practice; offset = 330; break;
       case 'E4': setPracticeResult('今天没有待订正错题', '今天的课堂练习<em>都做对啦</em>，继续保持', false); focus = practice; offset = 330; break;
-      case 'E9': showRetrySheet(); focus = practice; offset = 56; break;
       case 'F7':
         focus = recap; offset = 380;
         // 9 张里第 3 张失败，其余正常；轮播停在第 3 张
@@ -2383,7 +2363,6 @@ html.block .stage,html.block .device,html.block .screen{height:auto;min-height:0
 
   if (block) {
     document.documentElement.classList.add('block');
-    if (hash === 'E9') focus = document.querySelector('.retry-sheet');
     // 知识掌握这个 section 里还包着老师点评卡片，单独出图时不带它
     if (focus === knowledge || hash === 'W1') { focus = knowledge; comment.classList.add('st-hide'); }
     for (let node = focus; node && node !== document.body; node = node.parentElement) {
